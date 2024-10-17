@@ -1,0 +1,51 @@
+@use "../../sass/_index" as *
+
+.time-setting
+    @include flex(column, start, start)
+    padding-block: 1.5rem
+    margin-inline: 2.5rem
+    border-bottom: 1px solid $line-color
+
+    h2
+        text-transform: uppercase
+        @include heading-xs
+
+.time-setting__options
+    @include flex(row, space-between, null)
+    width: 100%
+
+    label
+        font-size: 12px
+        font-weight: 700
+        color: $light-l-bg
+        .input-container
+            @include flex(row, null, center)
+            width: 140px
+            height: 3rem
+            border-radius: 10px
+            padding-block: 1rem
+            padding-inline: 1rem
+            background-color: $default-light
+            input[type='number']
+                width: 100%
+                border: none
+                outline: none
+                background-color: $default-light
+                cursor: pointer
+                @include text-body
+                color: $light-bg
+                -moz-appearance: textfield
+            input::-webkit-outer-spin-button, input::-webkit-inner-spin-button
+                -webkit-appearance: none
+            .input-arrow-btns
+                @include flex(column, null, center)
+                gap: 9px
+                button
+                    outline: none
+                    border: none
+                    background: none
+                    cursor: pointer
+                    &:focus
+                        outline: 1px solid $dialog-bg
+                    &:active
+                        transform: translateY(1px)

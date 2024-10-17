@@ -1,0 +1,61 @@
+@use "../../sass/_index" as *
+
+dialog[open]
+    position: fixed
+    top: 0
+    left: 0
+    min-width: 100vw
+    min-height: 100vh
+    outline: none
+    border: none
+    display: grid
+    place-items: center
+    background-color: $dialog-bg
+.dialog-setting__container
+    width: 540px
+    // height: 464px
+    border-radius: 25px
+    background-color: $default
+    // padding-left: 2.5rem
+    // padding-right: 2.25rem
+    // padding-top: 2.125rem
+    // padding-bottom: 59px
+    @include flex(column, null, null)
+    position: relative
+    header
+        @include flex(row, space-between, center)
+        border-bottom: 1px solid $line-color
+        padding-top: 2.125rem
+        padding-bottom: 1.5rem
+        padding-inline: 2.5rem
+        h2
+            @include heading-m
+            color: $dark-bg
+        button.btn-close
+            outline: none
+            border: none
+            background: none
+            cursor: pointer
+            &:hover, &:active
+                transform: scale(0.95)
+        &:focus
+            outline: 1px solid $dialog-bg
+
+button.btn-apply
+    position: absolute
+    outline: none
+    border: none
+    background-color: $orange
+    border-radius: 26.5px
+    width: 140px
+    height: 53px
+    display: grid
+    place-items: center
+    bottom: -26px
+    left: 50%
+    transform: translateX(-50%)
+    cursor: pointer
+    color: $default
+    font-size: 1rem
+    font-family: "Kumbh Sans"
+    font-weight: 700

@@ -1,0 +1,34 @@
+@use "../../sass/_index" as *
+
+.time-setting__fonts
+    @include flex(row, space-between, center)
+    padding-block: 1.5rem
+    margin-inline: 2.5rem
+    border-bottom: 1px solid $line-color
+    h2
+        text-transform: uppercase
+        @include heading-xs
+
+    .font-options
+        @include flex(row, null, center)
+        gap: 1rem
+
+        button.btn-fonts
+            outline: none
+            border: none
+            border-radius: 50%
+            width: 2.5rem
+            aspect-ratio: 1
+            cursor: pointer
+            position: relative
+            isolation: isolate
+            &:hover
+                outline: 10px solid $default
+            &:active
+                transform: scale(0.95)
+                background-color: $dark-bg
+            &:focus
+                outline: 1px solid $dialog-bg
+            &:disabled
+                background-color: $dark-bg
+                color: $default

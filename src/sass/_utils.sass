@@ -17,12 +17,11 @@ $mobile: 30rem
         @media (min-width: 68rem)
             @content
 
-.flex
+@mixin flex($direction, $justify, $align)
     display: flex
-.flex-x
-    flex-direction: row
-.flex-y
-    flex-direction: column
+    flex-direction: $direction
+    justify-content: $justify
+    align-items: $align
 
 @keyframes slideRight
     from
@@ -59,3 +58,9 @@ $mobile: 30rem
     to
         opacity: 1
         filter: blur(0)
+
+.isShown
+    display: flex
+
+.isHidden
+    display: none

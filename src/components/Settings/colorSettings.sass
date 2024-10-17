@@ -1,0 +1,25 @@
+@use "../../sass/_index" as *
+
+.time-setting__colors
+    @include flex(row, space-between, center)
+    padding-top: 1.5rem
+    margin-inline: 2.5rem
+    padding-bottom: 59px
+    h2
+        text-transform: uppercase
+        @include heading-xs
+    .color-options
+        @include flex(row, null, null)
+        gap: 1rem
+        button
+            outline: nonew
+            border: none
+            border-radius: 50%
+            width: 2.5rem
+            aspect-ratio: 1
+            cursor: pointer
+
+            &:active
+                transform: scale(0.95)
+            &:focus
+                outline: 1px solid $dialog-bg
