@@ -5,19 +5,29 @@
     padding-block: 1.5rem
     margin-inline: 2.5rem
     border-bottom: 1px solid $line-color
+    gap: 22px
 
     h2
         text-transform: uppercase
         @include heading-xs
 
 .time-setting__options
-    @include flex(row, space-between, null)
+    @include flex(column, center, null)
     width: 100%
+    row-gap: 0.5rem
+    @include breakpoint(tablet)
+        flex-direction: row
+        justify-content: center
+        column-gap: 20px
 
     label
+        @include flex(row, space-between, center)
         font-size: 12px
         font-weight: 700
         color: $light-l-bg
+        @include breakpoint(tablet)
+            flex-direction: column
+            align-items: flex-start
         .input-container
             @include flex(row, null, center)
             width: 140px

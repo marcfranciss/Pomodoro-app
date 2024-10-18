@@ -1,11 +1,14 @@
 import upIcon from "../../assets/icon-arrow-up.svg";
 import downIcon from "../../assets/icon-arrow-down.svg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useAlarmContext } from "../../context/AlarmContext";
 
 interface ITimeOptions {
   id: string;
+  title: string;
 }
-export const TimeOptions = ({ id }: ITimeOptions) => {
+export const TimeOptions = ({ id, title }: ITimeOptions) => {
+  const { setAppTime } = useAlarmContext();
   const maxCount = 60;
   const [inputCount, setInputCount] = useState<number>(0);
 
@@ -23,9 +26,13 @@ export const TimeOptions = ({ id }: ITimeOptions) => {
       setInputCount((prev) => prev - 1);
     }
   };
+
+  useEffect(() => {
+    setAppTime(inputCount * 60);
+  }, [inputCount]);
   return (
     <label htmlFor={id}>
-      pomodoro
+      {title}
       <div className='input-container'>
         <input
           id={id}

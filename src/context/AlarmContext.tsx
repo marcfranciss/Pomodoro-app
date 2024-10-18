@@ -1,6 +1,8 @@
 import { createContext, ReactNode, useContext, useState } from "react";
 
 interface IAlarmContext {
+  selectedTimer: string;
+  setSelectedTimer: (value: string) => void;
   appTime: number;
   setAppTime: (value: number) => void;
   colorScheme: string;
@@ -18,13 +20,16 @@ interface IAlarmContextProvider {
 
 export const AlarmContextProvider = ({ children }: IAlarmContextProvider) => {
   const [appTime, setAppTime] = useState<number>(0);
-  const [colorScheme, setColorScheme] = useState<string>("Kumbh");
-  const [fontScheme, setFontScheme] = useState<string>("orange");
+  const [colorScheme, setColorScheme] = useState<string>("orange");
+  const [fontScheme, setFontScheme] = useState<string>("kumbh");
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
+  const [selectedTimer, setSelectedTimer] = useState<string>("pomodoro");
 
   return (
     <AlarmContext.Provider
       value={{
+        selectedTimer,
+        setSelectedTimer,
         appTime,
         setAppTime,
         colorScheme,

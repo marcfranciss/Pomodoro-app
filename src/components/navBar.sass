@@ -1,0 +1,38 @@
+@use "../sass/_index" as *
+
+.nav-container
+    @include flex(row, null, center)
+    width: 100%
+    max-width: 327px
+    height: 63px
+    background-color: $dark-bg
+    border-radius: 31.5px
+    padding: 0.5rem
+    margin-top: 39px
+    @include breakpoint(tablet)
+        max-width: 373px
+        margin-top: 55px
+    @include breakpoint(desktop)
+        max-width: 373px
+        margin-top: 47px
+    button
+        outline: none
+        border: none
+        color: hsla(227, 100%, 92%, 100%)
+        background-color: transparent
+        border-radius: 26.5px
+        display: grid
+        place-items: center
+        width: 105px
+        height: 3rem
+        cursor: pointer
+        @include text-body
+    .btn-pomodoro.isActive
+        background-color: $orange
+        color: $light-bg
+    .btn-shortbreak.isActive
+        background-color: $aqua
+        color: $light-bg
+    .btn-longbreak.isActive
+        background-color: $fuschia
+        color: $light-bg
