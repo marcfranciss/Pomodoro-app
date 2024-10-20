@@ -1,7 +1,8 @@
 import { Logo } from "./components/Logo";
 import { NavBar } from "./components/NavBar";
-import { Watch } from "./components/Watch";
+import { PomodoroClock } from "./components/PomodoroClock";
 import { Settings } from "./components/Settings/Settings";
+import { ShortBreakClock } from "./components/ShortBreakClock";
 import { AlarmContextProvider } from "./context/AlarmContext";
 
 export const App = () => {
@@ -10,7 +11,8 @@ export const App = () => {
       <Logo />
       <AlarmContextProvider>
         <NavBar />
-        <Watch />
+        <PomodoroClock />
+        <ShortBreakClock />
         <Settings />
       </AlarmContextProvider>
     </main>

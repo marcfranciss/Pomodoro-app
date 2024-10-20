@@ -6,9 +6,9 @@ import { useAlarmContext } from "../../context/AlarmContext";
 interface ITimeOptions {
   id: string;
   title: string;
+  newTime: (value: number) => void;
 }
-export const TimeOptions = ({ id, title }: ITimeOptions) => {
-  const { setAppTime } = useAlarmContext();
+export const TimeOptions = ({ id, title, newTime }: ITimeOptions) => {
   const maxCount = 60;
   const [inputCount, setInputCount] = useState<number>(0);
 
@@ -28,7 +28,8 @@ export const TimeOptions = ({ id, title }: ITimeOptions) => {
   };
 
   useEffect(() => {
-    setAppTime(inputCount * 60);
+    // initialTime(inputCount * 60);
+    newTime(inputCount * 60);
   }, [inputCount]);
   return (
     <label htmlFor={id}>

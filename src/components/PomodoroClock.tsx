@@ -4,39 +4,57 @@ import { motion } from "framer-motion";
 import "./watch.sass";
 import { useEffect, useState } from "react";
 
-export const Watch = () => {
+export const PomodoroClock = () => {
   const circleWidth = 346.8;
-  const { appTime, fontScheme, colorScheme } = useAlarmContext();
+  const { pomodoroTime, fontScheme, colorScheme } = useAlarmContext();
   const [isActive, setIsActive] = useState<boolean>(false);
-  const [timeLeft, seTimeLeft] = useState<number>(() => {
-    // Will retrieve the remaining time in localStorage or set to 0
-    const savedTime = localStorage.getItem("currTime");
-    return savedTime ? parseInt(savedTime, 10) : 0;
-  });
+  const [timeLeft, setTimeLeft] = useState<number>(0);
 
   useEffect(() => {
-    seTimeLeft(appTime);
-  }, [appTime]);
+    setTimeLeft(pomodoroTime);
+  }, [pomodoroTime]);
   useEffect(() => {
     let interval: any;
-    if (isActive && timeLeft > 0) {
-      interval = setInterval(() => {
-        seTimeLeft((prev) => {
-          const newTime = prev - 1;
-          localStorage.setItem("currTime", newTime.toString());
-          console.log(localStorage.getItem("currTime"));
-          return newTime;
-        });
-      }, 1000);
-    } else if (timeLeft <= 0) {
-      clearInterval(interval);
-      setIsActive(false);
-      localStorage.removeItem("currTime");
-      localStorage.removeItem("appTime");
+    const savedPomodoro = localStorage.getItem("appSetting");
+    if (savedPomodoro === null) {
+      console.error(`No settings in local storage`, Error);
+    } else {
+      let dataArray = savedPomodoro ? JSON.parse(savedPomodoro) : [];
+      setTimeLeft(dataArray[0].pomodoro);
+      if (isActive && timeLeft > 0) {
+        interval = setInterval(() => {
+          setTimeLeft((prev) => {
+            dataArray[0].pomodoro = prev - 1;
+            localStorage.setItem("appSetting", JSON.stringify(dataArray));
+            console.log(localStorage.getItem("appSetting"));
+            return dataArray[0].pomodoro;
+          });
+        }, 1000);
+      } else if (timeLeft <= 0) {
+        clearInterval(interval);
+        setIsActive(false);
+      }
     }
     return () => clearInterval(interval);
   }, [isActive, timeLeft]);
 
+  const handleRestart = () => {
+    const savedPomodoro = localStorage.getItem("appSetting");
+    if (savedPomodoro === null) {
+      alert(`No saved data in local storage`);
+    } else {
+      let dataArray = savedPomodoro ? JSON.parse(savedPomodoro) : [];
+      dataArray[0].pomodoro = pomodoroTime;
+      console.log(`pomodoro time: ${pomodoroTime}`);
+      console.log(`array update: ${dataArray[0].pomodoro}`);
+      console.log(`Latest data array: ${JSON.stringify(dataArray)}`);
+      setTimeLeft(pomodoroTime);
+      localStorage.setItem("appSetting", JSON.stringify(dataArray));
+      // console.log()
+
+      setIsActive(true);
+    }
+  };
   function convertToCountdown(totalSecs: number): string {
     const mins = Math.floor((totalSecs % 3600) / 60);
     const secs = totalSecs % 60;
@@ -61,7 +79,7 @@ export const Watch = () => {
                 strokeLinecap='round'
                 pathLength='100'
                 strokeDasharray={`${
-                  ((appTime - timeLeft) / appTime) * 100
+                  ((pomodoroTime - timeLeft) / pomodoroTime) * 100
                 } 100`}
                 stroke={
                   colorScheme === "orange"
@@ -97,6 +115,7 @@ export const Watch = () => {
           </div>
         </div>
       </div>
+      <button onClick={handleRestart}>Restart</button>
     </section>
   );
 };

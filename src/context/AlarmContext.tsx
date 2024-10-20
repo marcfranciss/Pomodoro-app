@@ -3,8 +3,12 @@ import { createContext, ReactNode, useContext, useState } from "react";
 interface IAlarmContext {
   selectedTimer: string;
   setSelectedTimer: (value: string) => void;
-  appTime: number;
-  setAppTime: (value: number) => void;
+  pomodoroTime: number;
+  setPomodoroTime: (value: number) => void;
+  shortBreakTime: number;
+  setShortBreakTime: (value: number) => void;
+  longBreakTime: number;
+  setLongBreakTime: (value: number) => void;
   colorScheme: string;
   setColorScheme: (value: string) => void;
   fontScheme: string;
@@ -19,7 +23,9 @@ interface IAlarmContextProvider {
 }
 
 export const AlarmContextProvider = ({ children }: IAlarmContextProvider) => {
-  const [appTime, setAppTime] = useState<number>(0);
+  const [pomodoroTime, setPomodoroTime] = useState<number>(0);
+  const [shortBreakTime, setShortBreakTime] = useState<number>(0);
+  const [longBreakTime, setLongBreakTime] = useState<number>(0);
   const [colorScheme, setColorScheme] = useState<string>("orange");
   const [fontScheme, setFontScheme] = useState<string>("kumbh");
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
@@ -30,8 +36,12 @@ export const AlarmContextProvider = ({ children }: IAlarmContextProvider) => {
       value={{
         selectedTimer,
         setSelectedTimer,
-        appTime,
-        setAppTime,
+        pomodoroTime,
+        setPomodoroTime,
+        shortBreakTime,
+        setShortBreakTime,
+        longBreakTime,
+        setLongBreakTime,
         colorScheme,
         setColorScheme,
         fontScheme,
