@@ -1,16 +1,23 @@
 import upIcon from "../../assets/icon-arrow-up.svg";
 import downIcon from "../../assets/icon-arrow-down.svg";
 import { useEffect, useState } from "react";
-import { useAlarmContext } from "../../context/AlarmContext";
 
 interface ITimeOptions {
-  id: string;
+  _id: string;
   title: string;
   newTime: (value: number) => void;
+  defaultVal: number;
 }
-export const TimeOptions = ({ id, title, newTime }: ITimeOptions) => {
+
+export const TimeOptions = ({
+  _id,
+  title,
+  newTime,
+  defaultVal,
+}: ITimeOptions) => {
   const maxCount = 60;
-  const [inputCount, setInputCount] = useState<number>(0);
+
+  const [inputCount, setInputCount] = useState<number>(defaultVal / maxCount);
 
   const handleUpButton = () => {
     if (inputCount >= maxCount) {
@@ -28,15 +35,15 @@ export const TimeOptions = ({ id, title, newTime }: ITimeOptions) => {
   };
 
   useEffect(() => {
-    // initialTime(inputCount * 60);
-    newTime(inputCount * 60);
+    newTime(inputCount * maxCount);
   }, [inputCount]);
+
   return (
-    <label htmlFor={id}>
+    <label htmlFor={_id}>
       {title}
       <div className='input-container'>
         <input
-          id={id}
+          id={_id}
           type='number'
           name=''
           min='0'

@@ -1,4 +1,5 @@
 import { createContext, ReactNode, useContext, useState } from "react";
+import { setNewLocalStorage } from "../components/Settings/defaultSetting";
 
 interface IAlarmContext {
   selectedTimer: string;
@@ -22,12 +23,41 @@ interface IAlarmContextProvider {
   children: ReactNode;
 }
 
+// The initial setting for every data
+const initialTimer = () => {
+  const defaultSetting = localStorage.getItem("defaultSetting");
+  const userSetting = localStorage.getItem("appSetting");
+  if (defaultSetting === null) {
+    // alert(`Please insert a new setting`);
+    console.log(`Default setting is not found in local storage..`);
+    console.log(`Default setting is now added to local storage.`);
+    return setNewLocalStorage();
+  } else if (userSetting === null) {
+    console.log(`User setting is not found in local storage..`);
+    console.log(`User setting is now added to local storage.`);
+    return setNewLocalStorage();
+  } else {
+    const userArr = JSON.parse(userSetting);
+    return userArr[0];
+  }
+};
+
 export const AlarmContextProvider = ({ children }: IAlarmContextProvider) => {
-  const [pomodoroTime, setPomodoroTime] = useState<number>(0);
-  const [shortBreakTime, setShortBreakTime] = useState<number>(0);
-  const [longBreakTime, setLongBreakTime] = useState<number>(0);
-  const [colorScheme, setColorScheme] = useState<string>("orange");
-  const [fontScheme, setFontScheme] = useState<string>("kumbh");
+  const [pomodoroTime, setPomodoroTime] = useState<number>(
+    initialTimer().pomodoro
+  );
+  const [shortBreakTime, setShortBreakTime] = useState<number>(
+    initialTimer().shortBreak
+  );
+  const [longBreakTime, setLongBreakTime] = useState<number>(
+    initialTimer().longBreak
+  );
+  const [colorScheme, setColorScheme] = useState<string>(
+    initialTimer().colorScheme
+  );
+  const [fontScheme, setFontScheme] = useState<string>(
+    initialTimer().fontScheme
+  );
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [selectedTimer, setSelectedTimer] = useState<string>("pomodoro");
 
@@ -59,7 +89,7 @@ export const useAlarmContext = () => {
 
   if (context === undefined) {
     throw new Error(
-      `useAlarContext must be used within an AlarmContextProvider`
+      `useAlarmContext must be used within an AlarmContextProvider`
     );
   } else {
     return context;

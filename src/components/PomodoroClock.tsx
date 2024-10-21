@@ -13,6 +13,7 @@ export const PomodoroClock = () => {
   useEffect(() => {
     setTimeLeft(pomodoroTime);
   }, [pomodoroTime]);
+
   useEffect(() => {
     let interval: any;
     const savedPomodoro = localStorage.getItem("appSetting");
@@ -39,22 +40,20 @@ export const PomodoroClock = () => {
   }, [isActive, timeLeft]);
 
   const handleRestart = () => {
-    const savedPomodoro = localStorage.getItem("appSetting");
-    if (savedPomodoro === null) {
-      alert(`No saved data in local storage`);
+    setTimeLeft(pomodoroTime);
+    const defaultData = localStorage.getItem("defaultSetting");
+    const latestData = localStorage.getItem("appSetting");
+    if (latestData === null) {
+      let newLatestData = defaultData ? JSON.parse(defaultData) : [];
+      localStorage.setItem("appSetting", JSON.stringify(newLatestData));
     } else {
-      let dataArray = savedPomodoro ? JSON.parse(savedPomodoro) : [];
-      dataArray[0].pomodoro = pomodoroTime;
-      console.log(`pomodoro time: ${pomodoroTime}`);
-      console.log(`array update: ${dataArray[0].pomodoro}`);
-      console.log(`Latest data array: ${JSON.stringify(dataArray)}`);
-      setTimeLeft(pomodoroTime);
-      localStorage.setItem("appSetting", JSON.stringify(dataArray));
-      // console.log()
-
-      setIsActive(true);
+      let replacedArr = latestData ? JSON.parse(latestData) : [];
+      replacedArr[0].pomodoro = pomodoroTime;
+      localStorage.setItem("appSetting", JSON.stringify(replacedArr));
     }
+    setIsActive(false);
   };
+
   function convertToCountdown(totalSecs: number): string {
     const mins = Math.floor((totalSecs % 3600) / 60);
     const secs = totalSecs % 60;
@@ -93,7 +92,15 @@ export const PomodoroClock = () => {
               />
             </svg>
             <p data-font={fontScheme}>{convertToCountdown(timeLeft)}</p>
-            {isActive ? (
+            {timeLeft <= 0 && (
+              <button
+                data-font={fontScheme}
+                className='btn-timer'
+                onClick={handleRestart}>
+                Restart
+              </button>
+            )}
+            {isActive && timeLeft > 0 && (
               <button
                 data-font={fontScheme}
                 className='btn-timer'
@@ -102,7 +109,8 @@ export const PomodoroClock = () => {
                 )}>
                 PAUSE
               </button>
-            ) : (
+            )}
+            {!isActive && timeLeft > 0 && (
               <button
                 data-font={fontScheme}
                 className='btn-timer'
@@ -115,7 +123,6 @@ export const PomodoroClock = () => {
           </div>
         </div>
       </div>
-      <button onClick={handleRestart}>Restart</button>
     </section>
   );
 };

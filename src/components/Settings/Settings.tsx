@@ -12,6 +12,7 @@ import "./Settings.sass";
 import { useAlarmContext } from "../../context/AlarmContext";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
+import { setNewLocalStorage } from "./defaultSetting";
 
 interface IUpdatedData {
   pomodoro: number;
@@ -31,60 +32,61 @@ export const Settings = () => {
     setFontScheme,
     setColorScheme,
   } = useAlarmContext();
-  const [newPomodoroTime, setNewPomodoroTime] = useState<number>(0);
-  const [newSBTime, setNewSBTime] = useState<number>(0);
-  const [newLBTime, setNewLBTime] = useState<number>(0);
+
+  const getDefault = localStorage.getItem("defaultSetting");
+  let getDefaultArr = getDefault
+    ? JSON.parse(getDefault)
+    : console.log(`No getDefault, check 'Settings.tsx'`);
+
+  const [newPomodoroTime, setNewPomodoroTime] = useState<number>(
+    getDefaultArr[0].pomodoro
+  );
+  const [newSBTime, setNewSBTime] = useState<number>(
+    getDefaultArr[0].shortBreak
+  );
+  const [newLBTime, setNewLBTime] = useState<number>(
+    getDefaultArr[0].longBreak
+  );
+  const [newFontScheme, setNewFontScheme] = useState<string>(
+    getDefaultArr[0].fontScheme
+  );
+  const [newColorScheme, setNewColorScheme] = useState<string>(
+    getDefaultArr[0].colorScheme
+  );
+
+  const updatedSetting: IUpdatedData[] = [
+    {
+      pomodoro: newPomodoroTime,
+      shortBreak: newSBTime,
+      longBreak: newLBTime,
+      fontScheme: newFontScheme,
+      colorScheme: newColorScheme,
+    },
+  ];
 
   const handleApply = () => {
-    const updatedSetting: IUpdatedData[] = [
-      {
-        pomodoro: newPomodoroTime,
-        shortBreak: newSBTime,
-        longBreak: newLBTime,
-        fontScheme: "kumbh",
-        colorScheme: "orange",
-      },
-    ];
+    console.log(updatedSetting);
+    setPomodoroTime(updatedSetting[0].pomodoro);
+    setShortBreakTime(updatedSetting[0].shortBreak);
+    setLongBreakTime(updatedSetting[0].longBreak);
+    setFontScheme(updatedSetting[0].fontScheme);
+    setColorScheme(updatedSetting[0].colorScheme);
+    localStorage.setItem("defaultSetting", JSON.stringify(updatedSetting));
     localStorage.setItem("appSetting", JSON.stringify(updatedSetting));
-    const newStorageData: string | null = localStorage.getItem("appSetting");
-    console.log(`New storage data: ${newStorageData}`);
-
-    let updatedData: IUpdatedData[] = newStorageData
-      ? JSON.parse(newStorageData)
-      : [];
-    setPomodoroTime(updatedData[0].pomodoro);
-    setShortBreakTime(updatedData[0].shortBreak);
-    setLongBreakTime(updatedData[0].longBreak);
-    setFontScheme(updatedData[0].fontScheme);
-    setColorScheme(updatedData[0].colorScheme);
     setIsDialogOpen(false);
   };
 
-  useEffect(() => {
-    const newLocalStorage = localStorage.getItem("appSetting");
-    // check if the client is new User:
-    // 1. if new user, setup a default setting;
-    // 2. if not, use the user preferred setting in local storage.
-    if (newLocalStorage === null) {
-      const defaultSetting = [
-        {
-          pomodoro: 25 * 60,
-          shortBreak: 5 * 60,
-          longBreak: 15 * 60,
-          fontScheme: "kumbh",
-          colorScheme: "orange",
-        },
-      ];
-      localStorage.setItem("appSetting", JSON.stringify(defaultSetting));
-      // 3. setting up states for context
-      setPomodoroTime(defaultSetting[0].pomodoro);
-      setShortBreakTime(defaultSetting[0].shortBreak);
-      setLongBreakTime(defaultSetting[0].longBreak);
-      setFontScheme(defaultSetting[0].fontScheme);
-      setColorScheme(defaultSetting[0].colorScheme);
-    }
-  }),
-    [];
+  // useEffect(() => {
+  //   // 1. Declare a variable that returns the array of default setting
+  //   const defaultSettingArr = setNewLocalStorage();
+  //   // 2. setting up states for context using the default setting's array
+  //   setPomodoroTime(defaultSettingArr.pomodoro);
+  //   setShortBreakTime(defaultSettingArr.shortBreak);
+  //   setLongBreakTime(defaultSettingArr.longBreak);
+  //   setFontScheme(defaultSettingArr.fontScheme);
+  //   setColorScheme(defaultSettingArr.colorScheme);
+  // }),
+  //   [];
   return (
     <section>
       <motion.dialog
@@ -107,12 +109,12 @@ export const Settings = () => {
             </button>
           </header>
           <TimeSetting
-            pomodoroTime={setNewPomodoroTime}
+            pomoTime={setNewPomodoroTime}
             sbTime={setNewSBTime}
             lbTime={setNewLBTime}
           />
-          <FontSettings />
-          <ColorSettings />
+          <FontSettings newFontScheme={setNewFontScheme} />
+          <ColorSettings newColorScheme={setNewColorScheme} />
           <button className='btn-apply' onClick={handleApply}>
             Apply
           </button>

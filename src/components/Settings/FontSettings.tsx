@@ -1,37 +1,41 @@
+import { useState } from "react";
 import { useAlarmContext } from "../../context/AlarmContext";
 import "./fontSettings.sass";
 
-export const FontSettings = () => {
-  const { fontScheme, setFontScheme } = useAlarmContext();
+interface IFontSettings {
+  newFontScheme: (value: string) => void;
+}
+const fontsArr = [
+  { title: "Kumbh Sans", name: "kumbh" },
+  { title: "Roboto Slab", name: "roboto" },
+  { title: "Space Mono", name: "spacemono" },
+];
+export const FontSettings = ({ newFontScheme }: IFontSettings) => {
+  const { fontScheme } = useAlarmContext();
+
+  const [fontSetting, setFontSetting] = useState<string>(fontScheme);
+  const handleFontSelected = (val: string) => {
+    setFontSetting(val);
+    newFontScheme(val);
+  };
   return (
     <section>
       <div className='time-setting__fonts'>
         <h2>Fonts</h2>
         <div className='font-options'>
-          <button
-            className='btn-fonts'
-            title='Kumbh Sans'
-            data-font='kumbh'
-            onClick={() => setFontScheme("kumbh")}
-            disabled={fontScheme === "kumbh"}>
-            Aa
-          </button>
-          <button
-            className='btn-fonts'
-            title='Roboto Slab'
-            data-font='roboto'
-            onClick={() => setFontScheme("roboto")}
-            disabled={fontScheme === "roboto"}>
-            Aa
-          </button>
-          <button
-            className='btn-fonts'
-            title='Space Mono'
-            data-font='spacemono'
-            onClick={() => setFontScheme("spacemono")}
-            disabled={fontScheme === "spacemono"}>
-            Aa
-          </button>
+          {fontsArr.map((fonts) => {
+            return (
+              <button
+                key={fonts.name}
+                className='btn-fonts'
+                title={fonts.title}
+                data-font={fonts.name}
+                onClick={() => handleFontSelected(fonts.name)}
+                disabled={fontSetting === fonts.name}>
+                Aa
+              </button>
+            );
+          })}
         </div>
       </div>
     </section>
