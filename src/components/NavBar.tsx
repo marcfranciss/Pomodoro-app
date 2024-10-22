@@ -7,7 +7,8 @@ const timerOptions = [
   { name: "longBreak", className: "btn-longbreak", text: "long break" },
 ];
 export const NavBar = () => {
-  const { selectedTimer, setSelectedTimer, fontScheme } = useAlarmContext();
+  const { selectedTimer, setSelectedTimer, fontScheme, colorScheme } =
+    useAlarmContext();
   return (
     <nav>
       <div className='nav-container'>
@@ -15,10 +16,11 @@ export const NavBar = () => {
           return (
             <button
               data-font={fontScheme}
+              data-color={selectedTimer === timer.name && `${colorScheme}`}
               key={timer.name}
               className={`
                 ${timer.className}
-                ${selectedTimer === timer.name ? "isActive" : ""}`}
+                ${selectedTimer === timer.name && "isActive"}`}
               onClick={() => setSelectedTimer(timer.name)}>
               {timer.text}
             </button>

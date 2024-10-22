@@ -4,33 +4,33 @@ import { motion } from "framer-motion";
 import "./watch.sass";
 import { useEffect, useState } from "react";
 
-export const PomodoroClock = () => {
+export const LongBreakClock = () => {
   const circleWidth = 346.8;
-  const { pomodoroTime, fontScheme, colorScheme } = useAlarmContext();
+  const { longBreakTime, fontScheme, colorScheme } = useAlarmContext();
   const [isActive, setIsActive] = useState<boolean>(false);
   const [timeLeft, setTimeLeft] = useState<number>(0);
 
   useEffect(() => {
     setIsActive(false);
-    setTimeLeft(pomodoroTime);
-  }, [pomodoroTime]);
+    setTimeLeft(longBreakTime);
+  }, [longBreakTime]);
 
   useEffect(() => {
     let interval: any;
-    const savedPomodoro = localStorage.getItem("appSetting");
-    if (savedPomodoro === null) {
+    const savedlongBreak = localStorage.getItem("appSetting");
+    if (savedlongBreak === null) {
       console.warn(
         `Setting seems to be deleted in local storage. Please setup a new setting.`
       );
     } else {
-      let dataArray = savedPomodoro ? JSON.parse(savedPomodoro) : [];
-      setTimeLeft(dataArray[0].pomodoro);
+      let dataArray = savedlongBreak ? JSON.parse(savedlongBreak) : [];
+      setTimeLeft(dataArray[0].longBreak);
       if (isActive && timeLeft > 0) {
         interval = setInterval(() => {
           setTimeLeft((prev) => {
-            dataArray[0].pomodoro = prev - 1;
+            dataArray[0].longBreak = prev - 1;
             localStorage.setItem("appSetting", JSON.stringify(dataArray));
-            return dataArray[0].pomodoro;
+            return dataArray[0].longBreak;
           });
         }, 1000);
       } else if (timeLeft <= 0) {
@@ -42,7 +42,8 @@ export const PomodoroClock = () => {
   }, [isActive, timeLeft]);
 
   const handleRestart = () => {
-    setTimeLeft(pomodoroTime);
+    setTimeLeft(longBreakTime);
+
     const defaultData = localStorage.getItem("defaultSetting");
     const latestData = localStorage.getItem("appSetting");
     if (latestData === null) {
@@ -50,12 +51,11 @@ export const PomodoroClock = () => {
       localStorage.setItem("appSetting", JSON.stringify(newLatestData));
     } else {
       let replacedArr = latestData ? JSON.parse(latestData) : [];
-      replacedArr[0].pomodoro = pomodoroTime;
+      replacedArr[0].longBreak = longBreakTime;
       localStorage.setItem("appSetting", JSON.stringify(replacedArr));
     }
     setIsActive(false);
   };
-
   function convertToCountdown(totalSecs: number): string {
     const mins = Math.floor((totalSecs % 3600) / 60);
     const secs = totalSecs % 60;
@@ -80,7 +80,7 @@ export const PomodoroClock = () => {
                 strokeLinecap='round'
                 pathLength='100'
                 strokeDasharray={`${
-                  ((pomodoroTime - timeLeft) / pomodoroTime) * 100
+                  ((longBreakTime - timeLeft) / longBreakTime) * 100
                 } 100`}
                 stroke={
                   colorScheme === "orange"

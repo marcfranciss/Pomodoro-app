@@ -11,6 +11,7 @@ export const ShortBreakClock = () => {
   const [timeLeft, setTimeLeft] = useState<number>(0);
 
   useEffect(() => {
+    setIsActive(false);
     setTimeLeft(shortBreakTime);
   }, [shortBreakTime]);
 
@@ -18,7 +19,9 @@ export const ShortBreakClock = () => {
     let interval: any;
     const savedShortBreak = localStorage.getItem("appSetting");
     if (savedShortBreak === null) {
-      console.error(`No settings in local storage`, Error);
+      console.warn(
+        `Setting seems to be deleted in local storage. Please setup a new setting.`
+      );
     } else {
       let dataArray = savedShortBreak ? JSON.parse(savedShortBreak) : [];
       setTimeLeft(dataArray[0].shortBreak);
@@ -27,7 +30,6 @@ export const ShortBreakClock = () => {
           setTimeLeft((prev) => {
             dataArray[0].shortBreak = prev - 1;
             localStorage.setItem("appSetting", JSON.stringify(dataArray));
-            console.log(localStorage.getItem("appSetting"));
             return dataArray[0].shortBreak;
           });
         }, 1000);
@@ -40,15 +42,19 @@ export const ShortBreakClock = () => {
   }, [isActive, timeLeft]);
 
   const handleRestart = () => {
-    const savedShortBreak = localStorage.getItem("appSetting");
-    if (savedShortBreak === null) {
-      alert(`No saved data in local storage`);
+    setTimeLeft(shortBreakTime);
+
+    const defaultData = localStorage.getItem("defaultSetting");
+    const latestData = localStorage.getItem("appSetting");
+    if (latestData === null) {
+      let newLatestData = defaultData ? JSON.parse(defaultData) : [];
+      localStorage.setItem("appSetting", JSON.stringify(newLatestData));
     } else {
-      let dataArray = JSON.parse(savedShortBreak);
-      dataArray[0].shortBreak = shortBreakTime;
-      localStorage.setItem("appSetting", JSON.stringify(dataArray));
-      setIsActive(true);
+      let replacedArr = latestData ? JSON.parse(latestData) : [];
+      replacedArr[0].shortBreak = shortBreakTime;
+      localStorage.setItem("appSetting", JSON.stringify(replacedArr));
     }
+    setIsActive(false);
   };
   function convertToCountdown(totalSecs: number): string {
     const mins = Math.floor((totalSecs % 3600) / 60);
@@ -88,29 +94,33 @@ export const ShortBreakClock = () => {
               />
             </svg>
             <p data-font={fontScheme}>{convertToCountdown(timeLeft)}</p>
-            {isActive ? (
+            {timeLeft <= 0 && (
               <button
                 data-font={fontScheme}
                 className='btn-timer'
-                onClick={() => (
-                  setIsActive(false), console.log(`timer activated`)
-                )}>
+                onClick={handleRestart}>
+                Restart
+              </button>
+            )}
+            {isActive && timeLeft > 0 && (
+              <button
+                data-font={fontScheme}
+                className='btn-timer'
+                onClick={() => setIsActive(false)}>
                 PAUSE
               </button>
-            ) : (
+            )}
+            {!isActive && timeLeft > 0 && (
               <button
                 data-font={fontScheme}
                 className='btn-timer'
-                onClick={() => (
-                  setIsActive(true), console.log(`timer activated`)
-                )}>
+                onClick={() => setIsActive(true)}>
                 START
               </button>
             )}
           </div>
         </div>
       </div>
-      <button onClick={handleRestart}>Restart</button>
     </section>
   );
 };

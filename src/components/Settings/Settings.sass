@@ -1,5 +1,7 @@
 @use "../../sass/_index" as *
 
+#app-setting
+    @include flex(column, center, center)
 dialog[open]
     position: fixed
     top: 0
@@ -58,4 +60,23 @@ button.btn-apply
     color: $default
     font-size: 1rem
     font-family: "Kumbh Sans"
-    font-weight: 700
+    font-weight: 700c
+
+button.btn-setting
+    outline: none
+    border: none
+    cursor: pointer
+    background: transparent
+    width: 1.75rem
+    aspect-ratio: 1/1
+    margin-inline: auto
+    margin-top: 79px
+    margin-bottom: 3rem
+    @include breakpoint(tablet)
+        margin-top: 144px
+        margin-bottom: 103px
+    @include breakpoint(desktop)
+        margin-top: 63px
+        margin-bottom: 56px
+    &:active
+        transform: scale(0.95)

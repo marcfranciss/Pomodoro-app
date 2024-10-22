@@ -35,9 +35,8 @@ export const TimeOptions = ({
   };
 
   useEffect(() => {
-    newTime(inputCount * maxCount);
+    newTime(inputCount * 60);
   }, [inputCount]);
-
   return (
     <label htmlFor={_id}>
       {title}

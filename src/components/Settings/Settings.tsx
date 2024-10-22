@@ -7,12 +7,11 @@ import { ColorSettings } from "./ColorSettings";
 import { FontSettings } from "./FontSettings";
 import { TimeSetting } from "./TimeSetting";
 
-// sass
+// sass, react
 import "./Settings.sass";
 import { useAlarmContext } from "../../context/AlarmContext";
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
-import { setNewLocalStorage } from "./defaultSetting";
+import { useState } from "react";
 
 interface IUpdatedData {
   pomodoro: number;
@@ -36,7 +35,7 @@ export const Settings = () => {
   const getDefault = localStorage.getItem("defaultSetting");
   let getDefaultArr = getDefault
     ? JSON.parse(getDefault)
-    : console.log(`No getDefault, check 'Settings.tsx'`);
+    : console.info(`No getDefault, check 'Settings.tsx'`);
 
   const [newPomodoroTime, setNewPomodoroTime] = useState<number>(
     getDefaultArr[0].pomodoro
@@ -65,30 +64,18 @@ export const Settings = () => {
   ];
 
   const handleApply = () => {
-    console.log(updatedSetting);
-    setPomodoroTime(updatedSetting[0].pomodoro);
-    setShortBreakTime(updatedSetting[0].shortBreak);
-    setLongBreakTime(updatedSetting[0].longBreak);
-    setFontScheme(updatedSetting[0].fontScheme);
-    setColorScheme(updatedSetting[0].colorScheme);
-    localStorage.setItem("defaultSetting", JSON.stringify(updatedSetting));
     localStorage.setItem("appSetting", JSON.stringify(updatedSetting));
+    localStorage.setItem("defaultSetting", JSON.stringify(updatedSetting));
     setIsDialogOpen(false);
+    setPomodoroTime(newPomodoroTime);
+    setShortBreakTime(newSBTime);
+    setLongBreakTime(newLBTime);
+    setFontScheme(newFontScheme);
+    setColorScheme(newColorScheme);
   };
 
-  // useEffect(() => {
-  //   // 1. Declare a variable that returns the array of default setting
-  //   const defaultSettingArr = setNewLocalStorage();
-  //   // 2. setting up states for context using the default setting's array
-  //   setPomodoroTime(defaultSettingArr.pomodoro);
-  //   setShortBreakTime(defaultSettingArr.shortBreak);
-  //   setLongBreakTime(defaultSettingArr.longBreak);
-  //   setFontScheme(defaultSettingArr.fontScheme);
-  //   setColorScheme(defaultSettingArr.colorScheme);
-  // }),
-  //   [];
   return (
-    <section>
+    <section id='app-setting'>
       <motion.dialog
         variants={{
           open: { opacity: 1, scale: 1 },
@@ -109,7 +96,7 @@ export const Settings = () => {
             </button>
           </header>
           <TimeSetting
-            pomoTime={setNewPomodoroTime}
+            pomoTime={(e) => setNewPomodoroTime(e)}
             sbTime={setNewSBTime}
             lbTime={setNewLBTime}
           />

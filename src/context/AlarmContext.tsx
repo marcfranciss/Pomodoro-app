@@ -29,12 +29,10 @@ const initialTimer = () => {
   const userSetting = localStorage.getItem("appSetting");
   if (defaultSetting === null) {
     // alert(`Please insert a new setting`);
-    console.log(`Default setting is not found in local storage..`);
-    console.log(`Default setting is now added to local storage.`);
+    console.log(`Default setting is not found in local storage...`);
     return setNewLocalStorage();
   } else if (userSetting === null) {
-    console.log(`User setting is not found in local storage..`);
-    console.log(`User setting is now added to local storage.`);
+    console.log(`User setting is not found in local storage...`);
     return setNewLocalStorage();
   } else {
     const userArr = JSON.parse(userSetting);
